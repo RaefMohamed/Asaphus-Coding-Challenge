@@ -44,6 +44,8 @@
 	
 	SW v0.3 - define global functions for the absorption of the green and blue boxes
 			- global function for getting the least box weight
+			
+	Sw v0.4 - implement the definition of taketurn method
 */
 
 #include <algorithm>
@@ -190,8 +192,41 @@ class Player {
   void takeTurn(uint32_t input_weight,
                 const std::vector<std::unique_ptr<Box> >& boxes) {
     // TODO
+	/*****************************************************************************/
+	/* get the least weight box then add the input weight depending on its color */
+	/****************************************************************************/
+	
+	int boxIndex;
+	double currentScore = 0.0;
+	int boxColor;
+	
+	/* get the index of the least weight box */
+	boxIndex = getLeastBoxIndex(boxes);
+
+	boxColor = boxes[boxIndex]->getBoxColor();
+	/* add input weight */
+	boxes[boxIndex]->addWeights(input_weight);
+	boxes[boxIndex]->setWeight(input_weight);
+	
+	/* absorb weight depending on the color */
+	if (boxColor == GREEN_BOX)
+	{
+		currentScore = absGreenBox(boxes[boxIndex]);
+
+	}
+	else if (boxColor == BLUE_BOX)
+	{
+		currentScore = absBlueBox(boxes[boxIndex]);
+	}
+	else
+	{
+		std::cout << "Invalid Box color" << boxColor;
+	}
+	/* set the score of the player */
+	setScore(currentScore);
   }
   double getScore() const { return score_; }
+  void setScore(double currentScore) { score_ += currentScore; }
 
  private:
   double score_{0.0};
