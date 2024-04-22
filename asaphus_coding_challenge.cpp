@@ -41,6 +41,9 @@
 			. method to store box weights in a vector and method to add box weight to the vector
 	
 	SW v0.2 - global functions to return unique pointer when creating objects for green and blue boxes 
+	
+	SW v0.3 - define global functions for the absorption of the green and blue boxes
+			- global function for getting the least box weight
 */
 
 #include <algorithm>
@@ -86,7 +89,6 @@ class Box {
 };
 
 // TODO
-// TODO
 std::unique_ptr<Box> Box::makeGreenBox(double initial_weight)
 {
     auto newBox = std::make_unique<Box>(initial_weight);
@@ -100,6 +102,88 @@ std::unique_ptr<Box> Box::makeBlueBox(double initial_weight)
     newBox->setBoxColor(BLUE_BOX);
     return (newBox);
 }
+
+/* function to return the index of the least weight box */
+int getLeastBoxIndex(const std::vector<std::unique_ptr<Box> >& boxes)
+{
+    int index = 0;
+    double minWeight = std::numeric_limits<double>::infinity();
+
+    if (boxes.empty())
+    {
+        throw std::runtime_error("Empty Vector");
+    }
+
+    for (int i = 0; i < boxes.size(); i++)
+    {
+        if (boxes[i]->getWeight() < minWeight)
+        {
+            minWeight = boxes[i]->getWeight();
+            index = i;
+        }
+    }
+
+    return index;
+}
+
+/* abosrb calculation for green box */
+double absGreenBox(const std::unique_ptr<Box>& box)
+{
+    double score;
+
+    std::vector<double> boxWeights = box->getBoxWeights();
+
+    if (boxWeights.size() < 3)
+    {
+        score = pow((std::accumulate(boxWeights.begin(), boxWeights.end(), 0.0) / boxWeights.size()), 2);
+    }
+    else
+    {
+        score = pow((std::accumulate(boxWeights.end() - 3, boxWeights.end(), 0.0) / 3), 2);
+    }
+
+    return score;
+}
+
+/* cantor pairing funtion for the blue box */
+double cantorPairingResults(int num1, int num2) {
+    return ((((num1 + num2) * (num1 + num2 + 1)) / 2) + num2);
+}
+
+/* calculation method for the blue boc */
+double absBlueBox(const std::unique_ptr<Box>& box)
+{
+    double score = 0.0;
+
+    std::vector<double> boxWeights = box->getBoxWeights();
+    double smallestWeight = boxWeights[0];
+    double largestWeight = boxWeights[0];
+
+    if (boxWeights.size() == 1)
+    {
+        score = cantorPairingResults(smallestWeight, largestWeight);
+    }
+    else
+    {
+        for (double weight : boxWeights)
+        {
+            if (weight < smallestWeight)
+            {
+                smallestWeight = weight;
+            }
+
+            if (weight > largestWeight)
+            {
+                largestWeight = weight;
+            }
+            score = cantorPairingResults(smallestWeight, largestWeight);
+        }
+
+    }
+
+    return score;
+}
+
 
 class Player {
  public:
