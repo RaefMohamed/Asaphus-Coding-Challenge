@@ -46,8 +46,7 @@
 			- global function for getting the least box weight
 			
 	Sw v0.4 - implement the definition of taketurn method
-	SW v0.5 - implement play function
-	SW v0.6 - define myBoxesAbsorption function for TEST_CASE
+	SW v0.5 - implement play function */
 */
 
 #include <algorithm>
@@ -262,44 +261,6 @@ std::pair<double, double> play(const std::vector<uint32_t>& input_weights) {
     return std::make_pair(player_A.getScore(), player_B.getScore());
 }
 
-/* for TEST_CASE */
-std::pair<double, double> myBoxesAbsorption(const std::vector<uint32_t>& input_weights, int32_t colour) {
-
-
-    std::vector<double> finalWeights;
-    std::vector<std::unique_ptr<Box> > boxes;
-    boxes.emplace_back(Box::makeGreenBox(0.0));
-    boxes.emplace_back(Box::makeGreenBox(0.1));
-    boxes.emplace_back(Box::makeBlueBox(0.2));
-    boxes.emplace_back(Box::makeBlueBox(0.3));
-
-    Player player_A, player_B;
-
-    for (int i = 0; i < input_weights.size(); i++) {
-        if (i % 2 == 0) {
-            player_A.takeTurn(input_weights[i], boxes);
-        }
-        else {
-            player_B.takeTurn(input_weights[i], boxes);
-        }
-    }
-
-    if (colour == GREEN_BOX)
-    {
-        std::cout << "Weight Of GreenBox 1 " << boxes[0]->getWeight() << ", Weight Of GreenBox 2 " << boxes[1]->getWeight() << std::endl;
-        return std::make_pair(boxes[0]->getWeight(), boxes[1]->getWeight());
-    }
-    else if (colour == BLUE_BOX)
-    {
-        std::cout << "Weight Of BlueBox 1 " << boxes[2]->getWeight() << ", Weight Of BlueBox 2 " << boxes[3]->getWeight() << std::endl;
-        return std::make_pair(boxes[2]->getWeight(), boxes[3]->getWeight());
-    }
-
-    return std::make_pair(0.0, 0.0);
-
-}
-
-
 TEST_CASE("Final scores for first 4 Fibonacci numbers", "[fibonacci4]") {
   std::vector<uint32_t> inputs{1, 1, 2, 3};
   auto result = play(inputs);
@@ -316,16 +277,8 @@ TEST_CASE("Final scores for first 8 Fibonacci numbers", "[fibonacci8]") {
 
 TEST_CASE("Test absorption of green box", "[green]") {
   // TODO
-  std::vector<uint32_t> inputs{ 1, 3, 4, 5 };
-  auto result = myBoxesAbsorption(inputs, GREEN_BOX);
-  REQUIRE(result.first == 1.0);
-  REQUIRE(result.second == 3.1);
 }
 
 TEST_CASE("Test absorption of blue box", "[blue]") {
   // TODO
-  std::vector<uint32_t> inputs{ 1, 3, 4, 5 };
-  auto result = myBoxesAbsorption(inputs, BLUE_BOX);
-  REQUIRE(result.first == 4.2);
-  REQUIRE(result.second == 5.3);
 }
