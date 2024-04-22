@@ -34,6 +34,12 @@
  * - This file includes the header-only test framework Catch v2.13.9.
  * - A main function is not required, as it is provided by the test framework.
  */
+ 
+ /* SW v0.1 - modify class Box:
+			. add methods to set and get box weight and colors
+			. define enum to set green and blue colors
+			. method to store box weights in a vector and method to add box weight to the vector
+*/
 
 #include <algorithm>
 #include <cstdint>
@@ -47,6 +53,13 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
+
+enum {
+    GREEN_BOX = 1,
+    BLUE_BOX = 2
+};
+
+
 class Box {
  public:
   explicit Box(double initial_weight) : weight_(initial_weight) {}
@@ -55,9 +68,19 @@ class Box {
   bool operator<(const Box& rhs) const { return weight_ < rhs.weight_; }
 
   // TODO
+  double getWeight() const { return weight_; }
+  void setWeight(double currentWeight) { weight_ += currentWeight; }
+
+  int getBoxColor() const { return bBoxColor; }
+  void setBoxColor(int color) { bBoxColor = color; }
+
+  std::vector<double>& getBoxWeights() { return boxWeights; }
+  void addWeights(double value) { boxWeights.push_back(value); }
 
  protected:
   double weight_;
+  std::vector<double> boxWeights;
+  int bBoxColor;
 };
 
 // TODO
