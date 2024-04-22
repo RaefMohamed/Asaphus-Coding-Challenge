@@ -46,6 +46,7 @@
 			- global function for getting the least box weight
 			
 	Sw v0.4 - implement the definition of taketurn method
+	SW v0.5 - implement play function */
 */
 
 #include <algorithm>
@@ -240,10 +241,24 @@ std::pair<double, double> play(const std::vector<uint32_t>& input_weights) {
   boxes.emplace_back(Box::makeBlueBox(0.3));
 
   // TODO
+  /* create objects from class Player */
+  Player player_A, player_B;
+  /* loop for iterating players turn */
+  for (int i = 0; i < input_weights.size(); i++)
+    {
+        if (i % 2 == 0) {
+            player_A.takeTurn(input_weights[i], boxes);
+        }
+        else {
+            player_B.takeTurn(input_weights[i], boxes);
+        }
 
-  std::cout << "Scores: player A " << player_A.getScore() << ", player B "
-            << player_B.getScore() << std::endl;
-  return std::make_pair(player_A.getScore(), player_B.getScore());
+    }
+	/* get the score result of both players */
+    std::cout << "Scores: player A " << player_A.getScore() << ", player B "
+        << player_B.getScore() << std::endl;
+	/* return the score result of player A and B */
+    return std::make_pair(player_A.getScore(), player_B.getScore());
 }
 
 TEST_CASE("Final scores for first 4 Fibonacci numbers", "[fibonacci4]") {
