@@ -39,6 +39,8 @@
 			. add methods to set and get box weight and colors
 			. define enum to set green and blue colors
 			. method to store box weights in a vector and method to add box weight to the vector
+	
+	SW v0.2 - global functions to return unique pointer when creating objects for green and blue boxes 
 */
 
 #include <algorithm>
@@ -84,6 +86,20 @@ class Box {
 };
 
 // TODO
+// TODO
+std::unique_ptr<Box> Box::makeGreenBox(double initial_weight)
+{
+    auto newBox = std::make_unique<Box>(initial_weight);
+    newBox->setBoxColor(GREEN_BOX);
+    return (newBox);
+}
+
+std::unique_ptr<Box> Box::makeBlueBox(double initial_weight)
+{
+    auto newBox = std::make_unique<Box>(initial_weight);
+    newBox->setBoxColor(BLUE_BOX);
+    return (newBox);
+}
 
 class Player {
  public:
